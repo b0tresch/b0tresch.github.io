@@ -221,14 +221,15 @@
     document.getElementById('footer-updated').textContent =
       'Page updated: ' + new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-    // Checkpoint count from Monad testnet
+    // Checkpoint count from Monad testnet — getCheckpointCount("b0tresch")
     async function fetchCheckpointCount() {
       try {
         const CONTRACT = '0xd3A98570Dba5Cf4f8306A676a2AB00dcD06Ac270';
-        // Call getCheckpointCount() - selector: 0x67ca3cc4
+        // Pre-encoded calldata for getCheckpointCount("b0tresch")
+        const CALLDATA = '0x06b15c83000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000086230747265736368000000000000000000000000000000000000000000000000';
         const body = JSON.stringify({
           jsonrpc: '2.0', id: 1, method: 'eth_call',
-          params: [{ to: CONTRACT, data: '0x67ca3cc4' }, 'latest']
+          params: [{ to: CONTRACT, data: CALLDATA }, 'latest']
         });
         const res = await fetch('https://testnet-rpc.monad.xyz', {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body
@@ -243,8 +244,8 @@
           }
         }
       } catch (e) {}
-      // Fallback: hardcoded approximate
-      document.getElementById('stat-checkpoints').textContent = '50+';
+      // Fallback
+      document.getElementById('stat-checkpoints').textContent = '79+';
       document.getElementById('stat-checkpoints-sub').textContent = 'every ~2h';
     }
     fetchCheckpointCount();
